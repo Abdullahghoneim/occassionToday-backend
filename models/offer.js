@@ -2,6 +2,16 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+const GeoSchema = new Schema({
+  type: {
+    type: String,
+    default: 'Point'
+  },
+  coordinates: {
+    type: [Number]
+  }
+});
+
 const offerSchema = new Schema({
   title: {
     type: String,
@@ -26,7 +36,8 @@ const offerSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
-  }
+  },
+  geometry: GeoSchema
 });
 
 module.exports = mongoose.model('Offers', offerSchema);

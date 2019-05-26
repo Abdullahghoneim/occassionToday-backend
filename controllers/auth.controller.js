@@ -42,8 +42,9 @@ exports.postSignup = (req, res, next) => {
 
 // LOGIN
 exports.postLogin = (req, res, next) => {
-  const { email, password, phone } = req.body;
-  User.findOne({ email: email, phone: phone })
+  const { email, password } = req.body;
+  console.log(email, password);
+  User.findOne({ email: email })
     .then(user => {
       if (!user) {
         const error = new Error('user is  not exist');
@@ -60,9 +61,7 @@ exports.postLogin = (req, res, next) => {
           }
           const token = jwt.sign(
             {
-              id: user._id,
-              email: user.email,
-              name: user.name
+              id: user._id
             },
             'supersecretkey'
           );
