@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 // SIGN UP
 exports.postSignup = (req, res, next) => {
-  const { name, email, password, phone } = req.body;
+  const { name, email, password, phone, isBrand, brandName } = req.body;
   User.findOne({ email: email, phone: phone })
     .then(user => {
       if (user) {
@@ -19,7 +19,9 @@ exports.postSignup = (req, res, next) => {
             name: name,
             password: hashedPassword,
             email: email,
-            phone: phone
+            phone: phone,
+            isBrand: isBrand,
+            brandName: brandName
           });
           return user.save();
         })
@@ -31,7 +33,9 @@ exports.postSignup = (req, res, next) => {
             'supersecretkey'
           );
           res.status(200).json({
-            token: token
+            token: token,
+            userId: result._id,
+            isBrand: result.isBrand
           });
         });
     })

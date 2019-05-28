@@ -14,6 +14,7 @@ app.use(helmet());
 
 app.use('/auth', authRouter);
 app.use(require('./routes/offers'));
+app.use(require('./routes/user'));
 
 // ERROR HANDILLING
 app.use((error, req, res, next) => {

@@ -12,32 +12,44 @@ const GeoSchema = new Schema({
   }
 });
 
-const offerSchema = new Schema({
-  title: {
-    type: String,
-    required: true
+const offerSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true
+    },
+    brand: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String
+    },
+    oldPrice: {
+      type: Number,
+      required: true
+    },
+    location: {
+      type: String
+    },
+    price: {
+      type: Number,
+      required: true
+    },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    imageUrl: {
+      type: String
+    },
+    dueDate: {
+      type: Schema.Types.Date
+    },
+    geometry: GeoSchema
   },
-  brand: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String
-  },
-  oldPrice: {
-    type: Number,
-    required: true
-  },
-  price: {
-    type: Number,
-    required: true
-  },
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  geometry: GeoSchema
-});
+  { timestamps: true }
+);
 
 module.exports = mongoose.model('Offers', offerSchema);

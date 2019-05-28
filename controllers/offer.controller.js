@@ -1,18 +1,8 @@
 const Offer = require('../models/offer');
 
 exports.getOffers = (req, res, next) => {
-  Offer.find({
-    geometry: {
-      $near: {
-        $geometry: {
-          type: 'Point',
-          coordinates: [29.003906249999996, 30.6662659463233]
-        },
-        $minDistance: 6000,
-        $maxDistance: 5000
-      }
-    }
-  })
+  Offer.find()
+    .sort({ createdAt: -1 })
     .then(offers => {
       res.status(200).json(offers);
     })
@@ -25,8 +15,31 @@ exports.getOffers = (req, res, next) => {
 exports.getById = (req, res, next) => {
   const { id } = req.params;
   Offer.findById(id)
+    .populate('userId', ['name', 'email', 'phone', 'brandName'])
     .then(offer => {
       res.status(200).json(offer);
+    })
+    .catch(err => {
+      next(err);
+    });
+};
+
+// search on database
+exports.postSearch = (req, res, next) => {
+  const { term } = req.query;
+
+  Offer.find({ $text: { $search: term } }, { score: { $meta: 'textScore' } })
+    .then(result => {
+      res.status(200).json(result);
+    })
+    .catch(err => next(err));
+};
+
+exports.deleteOffer = (req, res, next) => {
+  const { id } = req.params;
+  Offer.findByIdAndDelete(id)
+    .then(result => {
+      res.json(result);
     })
     .catch(err => {
       next(err);
@@ -41,8 +54,10 @@ exports.postNewOffer = (req, res, next) => {
     description,
     price,
     oldPrice,
+    location,
     userId,
-    geometry
+    geometry,
+    dueDate
   } = req.body;
   const newOffer = new Offer({
     title,
@@ -51,7 +66,9 @@ exports.postNewOffer = (req, res, next) => {
     oldPrice,
     userId,
     brand,
-    geometry
+    location,
+    geometry,
+    dueDate
   });
   newOffer
     .save()

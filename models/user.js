@@ -4,15 +4,15 @@ const Schema = mongoose.Schema;
 
 const userShema = new Schema({
   name: {
-    type: String
+    type: String,
+    required: true
   },
   phone: {
-    type: String,
-    default: null
+    type: Number
   },
   email: {
     type: String,
-    default: null
+    required: true
   },
   password: {
     type: String,
@@ -23,6 +23,10 @@ const userShema = new Schema({
   },
   brandLogo: {
     type: String
+  },
+  isBrand: {
+    type: Boolean,
+    default: false
   }
 });
 
